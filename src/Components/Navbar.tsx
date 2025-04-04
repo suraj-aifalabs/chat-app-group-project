@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-
+import "../Styles/Nav.css";
 function Navbar() {
   return (
     
@@ -10,15 +10,7 @@ function Navbar() {
         <Link to="/menu">Menu</Link>
         <Link to="/reserve">Reserve</Link>
       </nav>
-
-    
-    
-    
-    
-    
-    
-   
-  )
+ )
 }
 
 export default Navbar
