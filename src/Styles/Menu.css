@@ -1,0 +1,128 @@
+body{
+    background-color: rgb(241, 236, 169);
+}
+.bestseller{
+    background-color: #d4a017;
+    color:white;
+    font-family:poppins;
+
+}
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    flex-wrap: wrap; 
+}
+.inner-container {
+    position: relative;
+    width: 30%;
+    overflow: hidden;
+    border-radius: 10px; 
+    margin-top: 35px;
+}
+.avocado-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 0.5s ease-in-out;
+}
+.avocado-image:hover,
+.pizza-image:hover,
+.burger-image:hover {
+    transform: scale(1.1); 
+}
+.pizza-image {
+    display: block;
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    transition: transform 0.5s ease-in-out;
+}
+
+.burger-image{
+    display: block;
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    transition: transform 0.5s ease-in-out;
+}
+.food-img:hover{
+    transform: scale(1.1); 
+}
+.food-img{
+    display: block;
+    width: 100%;
+    height: 280px;
+    transition: transform 0.5s ease-in-out;
+    object-fit: cover;
+}
+.inner-container:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(202, 152, 16, 0.8);
+    width: 100%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transform: translateY(100%);
+    transition: transform 0.5s ease-in-out;
+}
+
+.inner-container:hover .overlay {
+    transform: translateY(0);
+}
+
+.text {
+    white-space: nowrap;
+    color: white;
+    font-family: "Poppins", sans-serif;
+    font-weight: bolder;
+    font-size: 20px;
+    padding: 10px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.inner-container:hover .text {
+    opacity: 1;
+}
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px; 
+    margin-top: 50px; 
+
+}
+.nav-buttons{
+    background-color: #d4a017;
+}
+
+.nav-buttons button {
+    background-color: #d4a017;
+    color: white;
+    font-size: 20px;
+    font-weight: bolder;
+    font-family: poppins;
+    border: none;
+    padding: 12px 24px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.nav-buttons button:hover {
+    background-color: #b38813;
+    transform: scale(1.05);
+}
+
+.nav-buttons button.active {
+    background-color: #9a7313;
+}
