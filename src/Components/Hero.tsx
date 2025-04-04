@@ -1,5 +1,5 @@
 
-// import './Home.css'; // Import the CSS for styling
+import "../Styles/Hero.css";
 
 function Hero() {
   return (

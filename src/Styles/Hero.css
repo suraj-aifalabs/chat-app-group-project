@@ -1,0 +1,41 @@
+/* Hero Section */
+.hero-section {
+    background: url('https://wallpaperaccess.com/full/9524787.jpg') no-repeat center center/cover;
+    color: white;
+    text-align:flex-start;
+    padding: 100px 20px;
+    display: flex;
+    height:100vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+  }
+  
+  .hero-section h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    text-align: start;
+  }
+  
+  .hero-section p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+  
+  .btn {
+    padding: 12px 20px;
+    background-color: #ff6f61;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+    font-weight: bold;
+  }
+  
+  .btn:hover {
+    background-color: #d94c3c;
+  }
+  
