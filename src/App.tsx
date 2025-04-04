@@ -7,19 +7,21 @@ import Navbar from "./Components/Navbar";
 import Hero from "./Components/Hero";
 import Footer from "./Components/Footer";
 import About from "./Components/About";
+import LandingPage from "./Components/LandingPage";
 
 
 
 function App() {
   return (
 <BrowserRouter>
-<Navbar/>
+{/* <Navbar/>
 <Hero/>
 <About/>
-<Footer/>
+<Footer/> */}
+
 <Routes>
         
-        
+        <Route path="/" element={<LandingPage/>}/>
         <Route path="/login" element={<Login />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/reserve" element={<Reserve />} />
