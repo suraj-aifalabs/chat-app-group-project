@@ -1,18 +1,31 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./Components/Login";
+import Menu from "./Components/Menu";
 import Reserve from "./Components/Reserve";
+import "./App.css";
+import Navbar from "./Components/Navbar";
+import Hero from "./Components/Hero";
+import Footer from "./Components/Footer";
+import About from "./Components/About";
 
 
-const App: React.FC = () => {
+
+function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
+<BrowserRouter>
+<Navbar/>
+<Hero/>
+<About/>
+<Footer/>
+<Routes>
+        
+        
+        <Route path="/login" element={<Login />} />
+        <Route path="/menu" element={<Menu />} />
         <Route path="/reserve" element={<Reserve />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
-};
+}
 
 export default App;
