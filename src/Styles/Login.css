@@ -2,12 +2,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* height: 50vh; */
-    overflow: scroll;
     margin: 0;
     background-color: #f8f9fa;
   }
- 
+h2{
+color: rgb(0, 0, 0)!important;
+}
+
 .login-container {
     width: 400px;
     height: 300px;
