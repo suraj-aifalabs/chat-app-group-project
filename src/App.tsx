@@ -7,6 +7,7 @@ import Footer from "./Components/Footer";
 import Header from "./Components/Header";
 import About from "./Components/About";
 import "./App.css";
+import LandingPage from "./Components/LandingPage";
 
 function Layout() {
   const location = useLocation();
@@ -31,7 +32,8 @@ function App() {
     <BrowserRouter>
       <Layout />
       <Routes>
-        <Route path="/" element={<></>} /> {/* Just to represent the home route */}
+        <Route path="/" element={<></>} />{" "}
+        {/* Just to represent the home route */}
         <Route path="/login" element={<Login />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/reserve" element={<Reserve />} />
