@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./../styles/reserve.css";
-
+ 
 interface Booking {
   name: string;
   phone: string;
@@ -9,10 +9,10 @@ interface Booking {
   table: string;
   items: string[];
 }
-
-const snackOptions = ["Pizza", "Burger", "Avocado Toast", "Pancake", "Scrambled Eggs","Smoothie Bowl"];
+ 
+const snackOptions = ["Pizza", "Burger", "Avocado Toast", "Pancake", "Scrambled Eggs", "Smoothie Bowl"];
 const tableOptions = Array.from({ length: 10 }, (_, i) => `Table ${i + 1}`);
-
+ 
 const Reserve: React.FC = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -22,25 +22,37 @@ const Reserve: React.FC = () => {
   const [items, setItems] = useState<string[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+ 
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+ 
+  // Format date to YYYY-MM-DD
+  const getFormattedDate = (dateObj: Date): string => {
+    return dateObj.toISOString().split("T")[0];
+  };
+ 
+  const today = new Date();
+  const minDate = getFormattedDate(today);
+ 
+  const maxDateObj = new Date();
+  maxDateObj.setDate(today.getDate() + 3); // Today + 3 days
+  const maxDate = getFormattedDate(maxDateObj);
+ 
   useEffect(() => {
     const storedBookings = localStorage.getItem("bookings");
     if (storedBookings) {
       setBookings(JSON.parse(storedBookings));
     }
-
+ 
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
       }
     };
-
+ 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
+ 
   const isTableAvailable = (selectedTable: string, selectedDate: string, selectedTime: string): boolean => {
     const selectedTimeObj = new Date(`${selectedDate}T${selectedTime}`);
     return !bookings.some((booking) => {
@@ -52,25 +64,25 @@ const Reserve: React.FC = () => {
       return false;
     });
   };
-
+ 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+ 
     if (!name || !phone || !date || !time || !table || items.length === 0) {
       alert("All fields are required!");
       return;
     }
-
+ 
     if (!isTableAvailable(table, date, time)) {
       alert(`Table ${table} is already booked for this time. Choose another table or a different time.`);
       return;
     }
-
+ 
     const newBooking: Booking = { name, phone, date, time, table, items };
     const updatedBookings = [...bookings, newBooking];
     setBookings(updatedBookings);
     localStorage.setItem("bookings", JSON.stringify(updatedBookings));
-
+ 
     alert(`Table ${table} booked successfully for ${date} at ${time}!`);
     setName("");
     setPhone("");
@@ -79,20 +91,27 @@ const Reserve: React.FC = () => {
     setTable("");
     setItems([]);
   };
-
+ 
   return (
     <div className="reserve-container">
       <h2>Table Reservation</h2>
       <form onSubmit={handleSubmit}>
-        {/* <label>Name:</label> */}
         <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
-        {/* <label>Phone Number:</label> */}
-        <input type="tel" placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} required />
-        {/* <label>Date:</label> */}
-        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-        {/* <label>Time:</label> */}
+ 
+        {/* You can uncomment phone number input if needed */}
+        {/* <input type="tel" placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} required /> */}
+ 
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          required
+          min={minDate}
+          max={maxDate}
+        />
+ 
         <input type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
-
+ 
         <select value={table} onChange={(e) => setTable(e.target.value)} required>
           <option value="">Select Table</option>
           {tableOptions.map((t) => (
@@ -101,8 +120,7 @@ const Reserve: React.FC = () => {
             </option>
           ))}
         </select>
-
-        {/* <label>Order Items:</label> */}
+ 
         <div className="dropdown-container" ref={dropdownRef}>
           <div className="dropdown-toggle" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
             {items.length > 0 ? items.join(", ") : "Order Items"}
@@ -129,11 +147,11 @@ const Reserve: React.FC = () => {
             </div>
           )}
         </div>
-
+ 
         <button type="submit">Book Table</button>
       </form>
     </div>
   );
 };
-
+ 
 export default Reserve;

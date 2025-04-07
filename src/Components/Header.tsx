@@ -1,7 +1,4 @@
-
-// import './Home.css'; // Import the CSS for styling
-
-function Hero() {
+function Header() {
   return (
     <div className="home-container">
 
@@ -13,4 +10,4 @@ function Hero() {
   );
 }
 
-export default Hero;
+export default Header;

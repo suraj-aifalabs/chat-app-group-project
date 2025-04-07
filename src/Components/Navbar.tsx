@@ -10,14 +10,6 @@ function Navbar() {
         <Link to="/menu">Menu</Link>
         <Link to="/reserve">Reserve</Link>
       </nav>
-
-    
-    
-    
-    
-    
-    
-   
   )
 }
 

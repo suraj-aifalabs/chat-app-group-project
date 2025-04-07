@@ -29,7 +29,6 @@ const Login: React.FC = () => {
         "service_5r1zv3b",
         "template_gq3ezar",
         templateParams,
-        // Below one is user id
         "PsuC8qAilPhVwMDol" 
       );
       setIsOtpSent(true);
