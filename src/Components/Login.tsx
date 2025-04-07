@@ -3,17 +3,25 @@ import { useNavigate } from "react-router-dom";
 import emailjs from "emailjs-com";
 import "./../styles/login.css";
 
-const Login: React.FC = () => {
+interface LoginProps {
+  name: string
+  isActive?: boolean
+}
+
+
+const Login: React.FC = (props) => {
+  const naviagate=useNavigate()
+
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [generatedOtp, setGeneratedOtp] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
-  const navigate = useNavigate();
+  
 
   const generateOtp = (): string => {
     return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
   };
-   
+  const navigate = useNavigate();
   const sendOtp = async () => {
     const otpCode = generateOtp();
     setGeneratedOtp(otpCode);
@@ -43,11 +51,13 @@ const Login: React.FC = () => {
   const verifyOtp = () => {
     if (otp === localStorage.getItem("otp")) {
       alert("OTP verified successfully!");
-      navigate("/reserve");
+      props.openReserve();
+      // navigate("/reserve");
     } else {
       alert("Invalid OTP. Try again.");
     }
   };
+
 
   return (
     <div className="login-container">

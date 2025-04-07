@@ -10,10 +10,11 @@ interface Booking {
   items: string[];
 }
 
+
 const snackOptions = ["Pizza", "Burger", "Avocado Toast", "Pancake", "Scrambled Eggs","Smoothie Bowl"];
 const tableOptions = Array.from({ length: 10 }, (_, i) => `Table ${i + 1}`);
 
-const Reserve: React.FC = () => {
+const Reserve: React.FC = (props) => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [date, setDate] = useState("");
@@ -78,6 +79,7 @@ const Reserve: React.FC = () => {
     setTime("");
     setTable("");
     setItems([]);
+    props.onClose();
   };
 
   return (
