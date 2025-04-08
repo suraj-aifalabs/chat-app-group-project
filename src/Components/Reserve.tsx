@@ -1,64 +1,65 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./../styles/reserve.css";
- 
+import {
+  TextField,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  Checkbox,
+  ListItemText,
+  Button,
+  Box,
+  Typography,
+  Select,
+} from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import dayjs, { Dayjs } from "dayjs";
+
 interface Booking {
   name: string;
-  phone: string;
   date: string;
   time: string;
   table: string;
   items: string[];
 }
- 
-const snackOptions = ["Pizza", "Burger", "Avocado Toast", "Pancake", "Scrambled Eggs", "Smoothie Bowl"];
+
+const snackOptions = [
+  "Pizza",
+  "Burger",
+  "Avocado Toast",
+  "Pancake",
+  "Scrambled Eggs",
+  "Smoothie Bowl",
+];
+
 const tableOptions = Array.from({ length: 10 }, (_, i) => `Table ${i + 1}`);
- 
+
+const tableSeats = tableOptions.map(() => Math.floor(Math.random() * 5) + 2);
+
 const Reserve: React.FC = () => {
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [dateTime, setDateTime] = useState<Dayjs | null>(null);
   const [table, setTable] = useState("");
   const [items, setItems] = useState<string[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
- 
-  const dropdownRef = useRef<HTMLDivElement>(null);
- 
-  // Format date to YYYY-MM-DD
-  const getFormattedDate = (dateObj: Date): string => {
-    return dateObj.toISOString().split("T")[0];
-  };
- 
-  const today = new Date();
-  const minDate = getFormattedDate(today);
- 
-  const maxDateObj = new Date();
-  maxDateObj.setDate(today.getDate() + 3); // Today + 3 days
-  const maxDate = getFormattedDate(maxDateObj);
- 
+
   useEffect(() => {
     const storedBookings = localStorage.getItem("bookings");
     if (storedBookings) {
       setBookings(JSON.parse(storedBookings));
     }
- 
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-    };
- 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
- 
-  const isTableAvailable = (selectedTable: string, selectedDate: string, selectedTime: string): boolean => {
-    const selectedTimeObj = new Date(`${selectedDate}T${selectedTime}`);
+
+  const isTableAvailable = (selectedTable: string, selectedDateTime: Dayjs | null): boolean => {
+    if (!selectedDateTime) return true;
     return !bookings.some((booking) => {
-      if (booking.table === selectedTable && booking.date === selectedDate) {
-        const bookedTimeObj = new Date(`${booking.date}T${booking.time}`);
-        const timeDiff = Math.abs(selectedTimeObj.getTime() - bookedTimeObj.getTime()) / (1000 * 60 * 60);
+      if (booking.table === selectedTable) {
+        const bookedTime = new Date(`${booking.date}T${booking.time}`);
+        const selectedTime = selectedDateTime.toDate();
+        const timeDiff = Math.abs(selectedTime.getTime() - bookedTime.getTime()) / (1000 * 60 * 60);
         return timeDiff < 2;
       }
       return false;
@@ -67,90 +68,152 @@ const Reserve: React.FC = () => {
  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
- 
-    if (!name || !phone || !date || !time || !table || items.length === 0) {
+
+    if (!name || !dateTime || !table || items.length === 0) {
       alert("All fields are required!");
       return;
     }
- 
-    if (!isTableAvailable(table, date, time)) {
+
+    if (!isTableAvailable(table, dateTime)) {
       alert(`Table ${table} is already booked for this time. Choose another table or a different time.`);
       return;
     }
- 
-    const newBooking: Booking = { name, phone, date, time, table, items };
+
+    const formattedDate = dateTime.format("YYYY-MM-DD");
+    const formattedTime = dateTime.format("HH:mm");
+
+    const newBooking: Booking = {
+      name,
+      date: formattedDate,
+      time: formattedTime,
+      table,
+      items,
+    };
+
     const updatedBookings = [...bookings, newBooking];
     setBookings(updatedBookings);
     localStorage.setItem("bookings", JSON.stringify(updatedBookings));
- 
-    alert(`Table ${table} booked successfully for ${date} at ${time}!`);
+
+    alert(`Table: ${table} booked successfully for ${formattedDate} at ${formattedTime}!`);
     setName("");
-    setPhone("");
-    setDate("");
-    setTime("");
+    setDateTime(null);
     setTable("");
     setItems([]);
   };
- 
+
+  const minDate = dayjs().startOf("day");
+  const maxDate = minDate.add(3, "day").endOf("day");
+
   return (
-    <div className="reserve-container">
-      <h2>Table Reservation</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
- 
-        {/* You can uncomment phone number input if needed */}
-        {/* <input type="tel" placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} required /> */}
- 
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-          min={minDate}
-          max={maxDate}
-        />
- 
-        <input type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
- 
-        <select value={table} onChange={(e) => setTable(e.target.value)} required>
-          <option value="">Select Table</option>
-          {tableOptions.map((t) => (
-            <option key={t} value={t} disabled={!isTableAvailable(t, date, time)}>
-              {t} {isTableAvailable(t, date, time) ? "" : "(Reserved)"}
-            </option>
-          ))}
-        </select>
- 
-        <div className="dropdown-container" ref={dropdownRef}>
-          <div className="dropdown-toggle" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-            {items.length > 0 ? items.join(", ") : "Order Items"}
-            <span className="arrow">{isDropdownOpen ? "▲" : "▼"}</span>
-          </div>
-          {isDropdownOpen && (
-            <div className="dropdown-menu">
+    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "center", padding: 4 }}>
+      
+      
+      <Box className="reserve-container" sx={{ maxWidth: 500, flex: 1, minWidth: 300,padding:4 }}>
+        <Typography variant="h4" gutterBottom>Table Reservation</Typography>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            id="name"
+            label="Name"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+         
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimePicker
+              value={dateTime}
+              onChange={setDateTime}
+              disablePast
+              minDateTime={minDate}
+              maxDateTime={maxDate}
+              slotProps={{
+                textField: { fullWidth: true, margin: "normal" },
+              }}
+            />
+          </LocalizationProvider>
+
+          <TextField
+            select
+            label="Select Table"
+            fullWidth
+            margin="normal"
+            value={table}
+            onChange={(e) => setTable(e.target.value)}
+            required
+          >
+            {tableOptions.map((t) => (
+              <MenuItem key={t} value={t} disabled={!isTableAvailable(t, dateTime)}>
+                {t} {!isTableAvailable(t, dateTime) ? "(Reserved)" : ""}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="order-items-label">Order Items</InputLabel>
+            <Select
+              labelId="order-items-label"
+              multiple
+              value={items}
+              onChange={(e) => setItems(e.target.value as string[])}
+              input={<OutlinedInput label="Order Items" />}
+              renderValue={(selected) => (selected as string[]).join(", ")}
+            >
               {snackOptions.map((snack) => (
-                <label key={snack} className="dropdown-item">
-                  <input
-                    type="checkbox"
-                    value={snack}
-                    checked={items.includes(snack)}
-                    onChange={(e) => {
-                      const selected = e.target.value;
-                      setItems((prev) =>
-                        prev.includes(selected) ? prev.filter((item) => item !== selected) : [...prev, selected]
-                      );
-                    }}
-                  />
-                  {snack}
-                </label>
+                <MenuItem key={snack} value={snack}>
+                  <Checkbox checked={items.includes(snack)} />
+                  <ListItemText primary={snack} />
+                </MenuItem>
               ))}
-            </div>
-          )}
-        </div>
- 
-        <button type="submit">Book Table</button>
-      </form>
-    </div>
+            </Select>
+          </FormControl>
+
+          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
+            Book Table
+          </Button>
+        </form>
+      </Box>
+      
+          <Box sx={{ flex: 1, minWidth: 300 }}>
+            <Typography variant="h5" gutterBottom>Table Availability</Typography>
+            <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 2 }}>
+              {tableOptions.map((t, index) => {
+                const isAvailable = isTableAvailable(t, dateTime);
+                const isSelected = t === table;
+
+                return (
+                  <Box
+                    key={t}
+                    sx={{
+                      border: "2px solid",
+                      borderColor: isSelected ? "primary.main" : "#ccc",
+                      borderRadius: 2,
+                      padding: 2,
+                      textAlign: "center",
+                      backgroundColor: isAvailable ? (isSelected ? "#e3f2fd" : "#f9f9f9") : "#ef9a9a",
+                      cursor: isAvailable ? "pointer" : "not-allowed",
+                      transition: "0.3s",
+                    }}
+                    onClick={() => {
+                      if (isAvailable) {
+                        setTable(t);
+                      } else {
+                        alert(`${t} is already reserved for the selected time.`);
+                      }
+                    }}
+                  >
+                    <Typography variant="subtitle1">{t}</Typography>
+                    <Typography variant="body2">{tableSeats[index]} members</Typography>
+                    {!isAvailable && <Typography variant="caption" color="error">Reserved</Typography>}
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
+
+    </Box>
   );
 };
  
