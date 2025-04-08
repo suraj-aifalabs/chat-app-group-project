@@ -11,7 +11,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 import "../Styles/Menu.css";
-import { foodData, beveragesData, bestSellersData } from "../DummyData";
+import { foodData, beveragesData, bestSellersData } from "./DummyData";
 
 const Menu = () => {
   const [activeSection, setActiveSection] = useState<"food" | "beverages">(
@@ -21,10 +21,9 @@ const Menu = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleItemClick = (item: any) => {
-    console.log("-------");
     setSelectedItems((prevSelected) =>
       prevSelected.includes(item)
-        ? prevSelected.filter((item:any) => item.id !== item.id)
+        ? prevSelected.filter((item: any) => item.id !== item.id)
         : [...prevSelected, item]
     );
   };
@@ -36,19 +35,24 @@ const Menu = () => {
 
   const ItemComponent = (props) => {
     return (
-      <Box sx={{
-        border: selectedItems ? "3px solidrgb(16, 12, 1)" : "none",
-        borderRadius: "12px",
-        transition: "border 0.3s ease",
-        cursor: "pointer",
-      }}
+      <Box
+        sx={{
+          border: selectedItems ? "3px solidrgb(16, 12, 1)" : "none",
+          borderRadius: "12px",
+          transition: "border 0.3s ease",
+          cursor: "pointer",
+        }}
         className={`inner-container ${
           selectedItems.includes(props.item.id) ? "selected" : ""
         }`}
         key={props.key}
         onClick={() => handleItemClick(props.item)}
       >
-        <img src={props.item.image} alt={props.item.name} className="pizza-image" />
+        <img
+          src={props.item.image}
+          alt={props.item.name}
+          className="pizza-image"
+        />
         <Box
           className="overlay"
           sx={{
@@ -80,9 +84,9 @@ const Menu = () => {
 
       <Container maxWidth="lg">
         <Box className="main-container" sx={{ fontFamily: "poppins" }}>
-        {bestSellersData.map((item) => {
-          return <ItemComponent item={item} key={item.id}/>;
-        })}
+          {bestSellersData.map((item) => {
+            return <ItemComponent item={item} key={item.id} />;
+          })}
         </Box>
       </Container>
 
@@ -103,10 +107,9 @@ const Menu = () => {
       {activeSection === "food" && (
         <Container maxWidth="lg">
           <Box className="main-container">
-
-          {foodData.map((item) => {
-          return <ItemComponent item={item} key={item.id}/>;
-        })}
+            {foodData.map((item) => {
+              return <ItemComponent item={item} key={item.id} />;
+            })}
           </Box>
         </Container>
       )}
@@ -114,10 +117,9 @@ const Menu = () => {
       {activeSection === "beverages" && (
         <Container maxWidth="lg">
           <Box className="main-container">
-            
-          {beveragesData.map((item) => {
-          return <ItemComponent item={item} key={item.id}/>;
-        })}
+            {beveragesData.map((item) => {
+              return <ItemComponent item={item} key={item.id} />;
+            })}
           </Box>
         </Container>
       )}
