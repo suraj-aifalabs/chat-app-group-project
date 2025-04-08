@@ -4,7 +4,23 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
  import LandingPage from "./Components/LandingPage";
 import Reserve from "./Components/Reserve";
 
+function Layout() {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
 
+  return (
+    <>
+      <Navbar />
+      {isHome && (
+        <>
+          <Header />
+          <About />
+          <Footer />
+        </>
+      )}
+    </>
+  );
+}
 
 function App() {
   return (
