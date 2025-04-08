@@ -9,6 +9,7 @@ import "../Styles/Header.css";
 import Login from "./Login";
 import Reserve from "./Reserve";
 
+
 function Header() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false); // State to control modal visibility

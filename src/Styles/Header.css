@@ -1,11 +1,12 @@
 /* Hero Section */
 
+
 .home-container{
   width: 100vw;
 }
 .hero-section {
   width: 100vw;
-    background: url('https://wallpaperaccess.com/full/9524787.jpg') no-repeat center center/cover;
+  background-image: url('../assets/Images.png');
     color: white;
     text-align:flex-start;
     /* padding: 100px 20px; */
