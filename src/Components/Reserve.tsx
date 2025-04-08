@@ -99,6 +99,7 @@ const Reserve: React.FC = () => {
     setDateTime(null);
     setTable("");
     setItems([]);
+    props.onClose();
   };
 
   const minDate = dayjs().startOf("day");
