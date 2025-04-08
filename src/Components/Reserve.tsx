@@ -53,19 +53,24 @@ const Reserve: React.FC = () => {
     }
   }, []);
 
-  const isTableAvailable = (selectedTable: string, selectedDateTime: Dayjs | null): boolean => {
+  const isTableAvailable = (
+    selectedTable: string,
+    selectedDateTime: Dayjs | null
+  ): boolean => {
     if (!selectedDateTime) return true;
     return !bookings.some((booking) => {
       if (booking.table === selectedTable) {
         const bookedTime = new Date(`${booking.date}T${booking.time}`);
         const selectedTime = selectedDateTime.toDate();
-        const timeDiff = Math.abs(selectedTime.getTime() - bookedTime.getTime()) / (1000 * 60 * 60);
+        const timeDiff =
+          Math.abs(selectedTime.getTime() - bookedTime.getTime()) /
+          (1000 * 60 * 60);
         return timeDiff < 2;
       }
       return false;
     });
   };
- 
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -75,7 +80,9 @@ const Reserve: React.FC = () => {
     }
 
     if (!isTableAvailable(table, dateTime)) {
-      alert(`Table ${table} is already booked for this time. Choose another table or a different time.`);
+      alert(
+        `Table ${table} is already booked for this time. Choose another table or a different time.`
+      );
       return;
     }
 
@@ -94,7 +101,9 @@ const Reserve: React.FC = () => {
     setBookings(updatedBookings);
     localStorage.setItem("bookings", JSON.stringify(updatedBookings));
 
-    alert(`Table: ${table} booked successfully for ${formattedDate} at ${formattedTime}!`);
+    alert(
+      `Table: ${table} booked successfully for ${formattedDate} at ${formattedTime}!`
+    );
     setName("");
     setDateTime(null);
     setTable("");
@@ -105,11 +114,22 @@ const Reserve: React.FC = () => {
   const maxDate = minDate.add(3, "day").endOf("day");
 
   return (
-    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "center", padding: 4 }}>
-      
-      
-      <Box className="reserve-container" sx={{ maxWidth: 500, flex: 1, minWidth: 300,padding:4 }}>
-        <Typography variant="h4" gutterBottom>Table Reservation</Typography>
+    <Box
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 4,
+        justifyContent: "center",
+        padding: 4,
+      }}
+    >
+      <Box
+        className="reserve-container"
+        sx={{ maxWidth: 500, flex: 1, minWidth: 300, padding: 4 }}
+      >
+        <Typography variant="h4" gutterBottom>
+          Table Reservation
+        </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
             id="name"
@@ -121,7 +141,7 @@ const Reserve: React.FC = () => {
             onChange={(e) => setName(e.target.value)}
             required
           />
-         
+
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
               value={dateTime}
@@ -145,7 +165,11 @@ const Reserve: React.FC = () => {
             required
           >
             {tableOptions.map((t) => (
-              <MenuItem key={t} value={t} disabled={!isTableAvailable(t, dateTime)}>
+              <MenuItem
+                key={t}
+                value={t}
+                disabled={!isTableAvailable(t, dateTime)}
+              >
                 {t} {!isTableAvailable(t, dateTime) ? "(Reserved)" : ""}
               </MenuItem>
             ))}
@@ -175,46 +199,63 @@ const Reserve: React.FC = () => {
           </Button>
         </form>
       </Box>
-      
-          <Box sx={{ flex: 1, minWidth: 300 }}>
-            <Typography variant="h5" gutterBottom>Table Availability</Typography>
-            <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 2 }}>
-              {tableOptions.map((t, index) => {
-                const isAvailable = isTableAvailable(t, dateTime);
-                const isSelected = t === table;
 
-                return (
-                  <Box
-                    key={t}
-                    sx={{
-                      border: "2px solid",
-                      borderColor: isSelected ? "primary.main" : "#ccc",
-                      borderRadius: 2,
-                      padding: 2,
-                      textAlign: "center",
-                      backgroundColor: isAvailable ? (isSelected ? "#e3f2fd" : "#f9f9f9") : "#ef9a9a",
-                      cursor: isAvailable ? "pointer" : "not-allowed",
-                      transition: "0.3s",
-                    }}
-                    onClick={() => {
-                      if (isAvailable) {
-                        setTable(t);
-                      } else {
-                        alert(`${t} is already reserved for the selected time.`);
-                      }
-                    }}
-                  >
-                    <Typography variant="subtitle1">{t}</Typography>
-                    <Typography variant="body2">{tableSeats[index]} members</Typography>
-                    {!isAvailable && <Typography variant="caption" color="error">Reserved</Typography>}
-                  </Box>
-                );
-              })}
-            </Box>
-          </Box>
+      <Box sx={{ flex: 1, minWidth: 300 }}>
+        <Typography variant="h5" gutterBottom>
+          Table Availability
+        </Typography>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gap: 2,
+          }}
+        >
+          {tableOptions.map((t, index) => {
+            const isAvailable = isTableAvailable(t, dateTime);
+            const isSelected = t === table;
 
+            return (
+              <Box
+                key={t}
+                sx={{
+                  border: "2px solid",
+                  borderColor: isSelected ? "primary.main" : "#ccc",
+                  borderRadius: 2,
+                  padding: 2,
+                  textAlign: "center",
+                  backgroundColor: isAvailable
+                    ? isSelected
+                      ? "#e3f2fd"
+                      : "#f9f9f9"
+                    : "#ef9a9a",
+                  cursor: isAvailable ? "pointer" : "not-allowed",
+                  transition: "0.3s",
+                }}
+                onClick={() => {
+                  if (isAvailable) {
+                    setTable(t);
+                  } else {
+                    alert(`${t} is already reserved for the selected time.`);
+                  }
+                }}
+              >
+                <Typography variant="subtitle1">{t}</Typography>
+                <Typography variant="body2">
+                  {tableSeats[index]} members
+                </Typography>
+                {!isAvailable && (
+                  <Typography variant="caption" color="error">
+                    Reserved
+                  </Typography>
+                )}
+              </Box>
+            );
+          })}
+        </Box>
+      </Box>
     </Box>
   );
 };
- 
+
 export default Reserve;

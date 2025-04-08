@@ -1,16 +1,17 @@
-import React from 'react'
 import Navbar from './Navbar'
-import Hero from './Header'
 import Footer from './Footer'
 import About from './About'
+import Header from './Header'
 
 export default function LandingPage() {
+  // functions to Open modal
   return (
     <div>
             <Navbar/>
-            <Hero/>
+            <Header/>
             <About/>
             <Footer/>
+            {/* modal */}
     </div>
   )
 }

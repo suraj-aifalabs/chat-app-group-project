@@ -120,4 +120,38 @@ body {
   
   .inner-container:hover .text {
     opacity: 1;
-  }
+}
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px; 
+    margin-top: 50px; 
+
+}
+.nav-buttons{
+    background-color: #d4a017;
+}
+
+.nav-buttons button {
+    background-color: #d4a017;
+    color: white;
+    font-size: 20px;
+    font-weight: bolder;
+    font-family: poppins;
+    border: none;
+    padding: 12px 24px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.nav-buttons button:hover {
+    background-color: #b38813;
+    transform: scale(1.05);
+}
+
+.nav-buttons button.active {
+    background-color: #9a7313;
+}
+
+ 

@@ -1,13 +1,8 @@
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
-import Login from "./Components/Login";
-import Menu from "./Components/Menu";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+ import Login from "./Components/Login";
+   import Menu from "./Components/Menu";
+ import LandingPage from "./Components/LandingPage";
 import Reserve from "./Components/Reserve";
-import Navbar from "./Components/Navbar";
-import Footer from "./Components/Footer";
-import Header from "./Components/Header";
-import About from "./Components/About";
-import "./App.css";
-import LandingPage from "./Components/LandingPage";
 
 function Layout() {
   const location = useLocation();
@@ -29,14 +24,14 @@ function Layout() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Layout />
-      <Routes>
-        <Route path="/" element={<></>} />{" "}
-        {/* Just to represent the home route */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/menu" element={<Menu />} />
-        <Route path="/reserve" element={<Reserve />} />
+<BrowserRouter>
+
+<Routes>
+        
+        <Route path="/" element={<LandingPage/>}/>
+          <Route path="/login" element={<Login />} />  
+         <Route path="/menu" element={<Menu />} />  
+         <Route path="/reserve" element={<Reserve />} />  
       </Routes>
     </BrowserRouter>
   );
