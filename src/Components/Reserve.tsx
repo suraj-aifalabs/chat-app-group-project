@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./../styles/reserve.css";
+import { useNavigate } from "react-router-dom";
+
 import {
   TextField,
   MenuItem,
@@ -12,6 +14,9 @@ import {
   Box,
   Typography,
   Select,
+  Snackbar,
+  SnackbarContent,
+  SnackbarOrigin,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -26,17 +31,14 @@ interface Booking {
   items: string[];
 }
 
-const snackOptions = [
-  "Pizza",
-  "Burger",
-  "Avocado Toast",
-  "Pancake",
-  "Scrambled Eggs",
-  "Smoothie Bowl",
-];
+interface State extends SnackbarOrigin {
+  open: boolean;
+}
 
+
+
+const snackOptions = [""];
 const tableOptions = Array.from({ length: 10 }, (_, i) => `Table ${i + 1}`);
-
 const tableSeats = tableOptions.map(() => Math.floor(Math.random() * 5) + 2);
 
 const Reserve: React.FC = () => {
@@ -45,6 +47,23 @@ const Reserve: React.FC = () => {
   const [table, setTable] = useState("");
   const [items, setItems] = useState<string[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [snackState, setSnackState] = useState<State>({
+    open: false,
+    vertical: "top",
+    horizontal: "right",
+  });
+  const [snackSeverity, setSnackSeverity] = useState<"success" | "error">("success");
+  const [snackMessage, setSnackMessage] = useState("");
+
+  const navigate = useNavigate();
+  const { vertical, horizontal, open } = snackState;
+
+  useEffect(() => {
+    const storedSelectedItems = localStorage.getItem("selectedItems");
+    if (storedSelectedItems) {
+      setItems(JSON.parse(storedSelectedItems));
+    }
+  }, []);
 
   useEffect(() => {
     const storedBookings = localStorage.getItem("bookings");
@@ -52,6 +71,31 @@ const Reserve: React.FC = () => {
       setBookings(JSON.parse(storedBookings));
     }
   }, []);
+
+  useEffect(() => {
+    const savedName = localStorage.getItem("reservation_name");
+    const savedDateTime = localStorage.getItem("reservation_dateTime");
+    const savedTable = localStorage.getItem("reservation_table");
+  
+    if (savedName) setName(savedName);
+    if (savedDateTime) setDateTime(dayjs(savedDateTime));
+    if (savedTable) setTable(savedTable);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("reservation_name", name);
+  }, [name]);
+  
+  useEffect(() => {
+    if (dateTime) {
+      localStorage.setItem("reservation_dateTime", dateTime.toISOString());
+    }
+  }, [dateTime]);
+  
+  useEffect(() => {
+    localStorage.setItem("reservation_table", table);
+  }, [table]);
+  
 
   const isTableAvailable = (
     selectedTable: string,
@@ -63,8 +107,7 @@ const Reserve: React.FC = () => {
         const bookedTime = new Date(`${booking.date}T${booking.time}`);
         const selectedTime = selectedDateTime.toDate();
         const timeDiff =
-          Math.abs(selectedTime.getTime() - bookedTime.getTime()) /
-          (1000 * 60 * 60);
+          Math.abs(selectedTime.getTime() - bookedTime.getTime()) / (1000 * 60 * 60);
         return timeDiff < 2;
       }
       return false;
@@ -73,16 +116,22 @@ const Reserve: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    localStorage.removeItem("reservation_name");
+localStorage.removeItem("reservation_dateTime");
+localStorage.removeItem("reservation_table");
+
 
     if (!name || !dateTime || !table || items.length === 0) {
-      alert("All fields are required!");
+      setSnackSeverity("error");
+      setSnackMessage("All fields are required!");
+      setSnackState({ open: true, vertical: "top", horizontal: "right" });
       return;
     }
 
     if (!isTableAvailable(table, dateTime)) {
-      alert(
-        `Table ${table} is already booked for this time. Choose another table or a different time.`
-      );
+      setSnackSeverity("error");
+      setSnackMessage(`Table ${table} is already booked for this time.`);
+      setSnackState({ open: true, vertical: "top", horizontal: "right" });
       return;
     }
 
@@ -101,13 +150,19 @@ const Reserve: React.FC = () => {
     setBookings(updatedBookings);
     localStorage.setItem("bookings", JSON.stringify(updatedBookings));
 
-    alert(
-      `Table: ${table} booked successfully for ${formattedDate} at ${formattedTime}!`
-    );
+    setSnackSeverity("success");
+    setSnackMessage(`Table: ${table} booked successfully!`);
+    setSnackState({ open: true, vertical: "top", horizontal: "right" });
+
     setName("");
     setDateTime(null);
     setTable("");
     setItems([]);
+    localStorage.removeItem("selectedItems");
+  };
+
+  const handleClose = () => {
+    setSnackState({ ...snackState, open: false });
   };
 
   const minDate = dayjs().startOf("day");
@@ -132,7 +187,6 @@ const Reserve: React.FC = () => {
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
-            id="name"
             label="Name"
             variant="outlined"
             fullWidth
@@ -176,7 +230,7 @@ const Reserve: React.FC = () => {
           </TextField>
 
           <FormControl fullWidth margin="normal">
-            <InputLabel id="order-items-label">Order Items</InputLabel>
+            {/* <InputLabel id="order-items-label">Order Items</InputLabel>
             <Select
               labelId="order-items-label"
               multiple
@@ -191,8 +245,17 @@ const Reserve: React.FC = () => {
                   <ListItemText primary={snack} />
                 </MenuItem>
               ))}
-            </Select>
+            </Select> */}
           </FormControl>
+
+          <Button
+            variant="outlined"
+            fullWidth
+            sx={{ mt: 1 }}
+            onClick={() => navigate("/menu")}
+          >
+            Pre Order
+          </Button>
 
           <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
             Book Table
@@ -236,7 +299,9 @@ const Reserve: React.FC = () => {
                   if (isAvailable) {
                     setTable(t);
                   } else {
-                    alert(`${t} is already reserved for the selected time.`);
+                    setSnackSeverity("error");
+                    setSnackMessage(`${t} is already reserved for the selected time.`);
+                    setSnackState({ open: true, vertical: "top", horizontal: "right" });
                   }
                 }}
               >
@@ -254,6 +319,22 @@ const Reserve: React.FC = () => {
           })}
         </Box>
       </Box>
+
+      <Snackbar
+        anchorOrigin={{ vertical, horizontal }}
+        open={open}
+        onClose={handleClose}
+        autoHideDuration={4000}
+        key={vertical + horizontal}
+      >
+        <SnackbarContent
+          sx={{
+            backgroundColor: snackSeverity === "success" ? "#4caf50" : "#f44336",
+            fontWeight: "bold",
+          }}
+          message={snackMessage}
+        />
+      </Snackbar>
     </Box>
   );
 };
