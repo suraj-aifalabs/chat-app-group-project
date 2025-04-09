@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./../styles/reserve.css";
+import CustomButton from './CustomButton';
+
 import {
   TextField,
   MenuItem,
@@ -193,11 +195,14 @@ const Reserve: React.FC = () => {
               ))}
             </Select>
           </FormControl>
-
-          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
-            Book Table
-          </Button>
-        </form>
+          <CustomButton
+        label="Book Table"
+        type="submit"
+        variant="contained"
+        fullWidth
+        sx={{ mt: 2 }} // Additional margin-top from the parent component
+      />
+      </form>
       </Box>
 
       <Box sx={{ flex: 1, minWidth: 300 }}>

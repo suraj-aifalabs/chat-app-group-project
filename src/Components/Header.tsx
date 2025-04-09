@@ -8,8 +8,12 @@ import Button from "@mui/material/Button";
 import "../Styles/Header.css";
 import Login from "./Login";
 import Reserve from "./Reserve";
+import CustomButton from './CustomButton';
+
+
 
 function Header() {
+
   // const navigate = useNavigate();
   const [open, setOpen] = useState(false); // State to control modal visibility
   const [loginOpen, setLoginOpen] = useState(false); // State to control modal visibility
@@ -44,24 +48,34 @@ function Header() {
       <header className="hero-section">
         <h1>Welcome to Golden Hour Cafe</h1>
         <p>Experience the taste of authentic flavors in every bite.</p>
-        <button className="reserve-button" onClick={handleReserveClick}>
-          Reserve
-        </button>
+        {/* <button className="reserve-button" onClick={handleReserveClick}> */}
+          {/* Reserve */}
+        {/* </header></button> */}
+        <CustomButton label="Reserve" onClick={handleReserveClick} color="black" />
+
+
       </header>
 
       {/* first call */}
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Reserve a Table</DialogTitle>
         <DialogContent>
+        <DialogTitle sx={{ color: 'black' }}>Reserve a Table</DialogTitle>
           <p>Please log in to reserve a table.</p>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary">
+          {/*<Button  onClick={handleClose} color="black" >
             Cancel
           </Button>
-          <Button onClick={handleLoginClick} color="primary">
+                  
+
+          <Button onClick={handleLoginClick} color="black">
             Log In
-          </Button>
+          </Button>*/}
+                            <CustomButton label="Cancel" onClick={handleClose} color="black" />
+                            <CustomButton label="Log In" onClick={handleLoginClick} color="black" />
+
+
+
         </DialogActions>
       </Dialog>
 

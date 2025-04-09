@@ -1,34 +1,41 @@
 /* Hero Section */
-
-
-.home-container{
-  width: 100vw;
-}
 .hero-section {
-  width: 100vw;
   background-image: url('../assets/Images.png');
-    color: white;
-    text-align:flex-start;
-    /* padding: 100px 20px; */
-    display: flex;
-    height:100vh;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    position: relative;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
-  }
-  
-  .hero-section h1 {
-    font-size: 3rem;
-    /* margin-bottom: 200px; */
-    text-align: start;
+  background-size: cover; /* Make sure the background image covers the full area */
+  background-position: center; /* Center the image */
+  color: white;
+  text-align: center; /* Center the text */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 20px;
+  position: relative;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+  padding: 0 20px; /* Padding on the sides */
+  box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
 
+.hero-section h1 {
+  font-size: 3rem;
+  margin: 0; /* Remove any default margin */
+  text-align: center; /* Center align the title text */
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  text-align: center; /* Center align the paragraph */
+}
+
+/* Make the text responsive */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2rem; /* Reduce font size for smaller screens */
   }
-  
+
   .hero-section p {
-    font-size: 1.2rem;
-    margin-top: 10px;
+    font-size: 1rem; /* Adjust paragraph size for smaller screens */
   }
-  
+}
