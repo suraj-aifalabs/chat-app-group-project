@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import emailjs from "emailjs-com";
+import CustomButton from './CustomButton';
 import {
   Dialog,
   DialogTitle,
@@ -116,9 +117,13 @@ const Login: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
-                <Button variant="contained" color="primary" fullWidth onClick={sendOtp}>
-                  Send OTP
-                </Button>
+                {/* <Button variant="contained" color="primary" fullWidth onClick={sendOtp}> */}
+                 {/* Send OTP/*}
+                {/* </Button> */}
+                <CustomButton label="Send Otp" onClick={sendOtp} color="black" />
+
+                
+
               </>
             ) : (
               <>
@@ -130,17 +135,19 @@ const Login: React.FC = () => {
                   onChange={(e) => setOtp(e.target.value)}
                   required
                 />
-                <Button variant="contained" color="success" fullWidth onClick={verifyOtp}>
-                  Verify OTP
-                </Button>
-              </>
+                <CustomButton label="Verify OTP" variant="contained" color="success" fullWidth onClick={verifyOtp}/>
+                
+                </>
             )}
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="secondary" fullWidth>
+          {/*<Button onClick={handleCloseDialog} color="secondary" fullWidth>
             Cancel
-          </Button>
+          </Button>*/}
+            <CustomButton label="cancel" onClick={handleCloseDialog} color="black"/>
+
+
         </DialogActions>
       </Dialog>
 
