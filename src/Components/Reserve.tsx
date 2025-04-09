@@ -230,14 +230,7 @@ localStorage.removeItem("reservation_table");
             ))}
           </TextField>
 
-          <Button
-            variant="outlined"
-            fullWidth
-            sx={{ mt: 1 }}
-            onClick={() => navigate("/menu")}
-          >
-            Pre Order
-          </Button>
+          
 
           <FormControl fullWidth margin="normal">
             {/* <InputLabel id="order-items-label">Order Items</InputLabel>
