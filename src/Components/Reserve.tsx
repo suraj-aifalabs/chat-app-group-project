@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./../styles/reserve.css";
+import { useNavigate } from "react-router-dom";
+
 import {
   TextField,
   MenuItem,
@@ -36,7 +38,6 @@ const snackOptions = [
 ];
 
 const tableOptions = Array.from({ length: 10 }, (_, i) => `Table ${i + 1}`);
-
 const tableSeats = tableOptions.map(() => Math.floor(Math.random() * 5) + 2);
 
 const Reserve: React.FC = () => {
@@ -45,6 +46,14 @@ const Reserve: React.FC = () => {
   const [table, setTable] = useState("");
   const [items, setItems] = useState<string[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedSelectedItems = localStorage.getItem("selectedItems");
+    if (storedSelectedItems) {
+      setItems(JSON.parse(storedSelectedItems));
+    }
+  }, []);
 
   useEffect(() => {
     const storedBookings = localStorage.getItem("bookings");
@@ -104,10 +113,12 @@ const Reserve: React.FC = () => {
     alert(
       `Table: ${table} booked successfully for ${formattedDate} at ${formattedTime}!`
     );
+
     setName("");
     setDateTime(null);
     setTable("");
     setItems([]);
+    localStorage.removeItem("selectedItems");
   };
 
   const minDate = dayjs().startOf("day");
@@ -132,7 +143,6 @@ const Reserve: React.FC = () => {
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
-            id="name"
             label="Name"
             variant="outlined"
             fullWidth
@@ -174,6 +184,15 @@ const Reserve: React.FC = () => {
               </MenuItem>
             ))}
           </TextField>
+
+          <Button
+            variant="outlined"
+            fullWidth
+            sx={{ mt: 1 }}
+            onClick={() => navigate("/menu")}
+          >
+            Pre Order
+          </Button>
 
           <FormControl fullWidth margin="normal">
             <InputLabel id="order-items-label">Order Items</InputLabel>
