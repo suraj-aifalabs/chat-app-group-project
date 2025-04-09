@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./../styles/reserve.css";
 import { useNavigate } from "react-router-dom";
 
-import { useNavigate } from "react-router-dom";
 
 import {
   TextField,
