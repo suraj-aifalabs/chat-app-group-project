@@ -7,9 +7,9 @@ function Navbar() {
     <AppBar
       position="static"
       color="primary"
-      sx={{ backgroundColor: "#ffcc00",width:"100vw", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)" }}
+      sx={{ backgroundColor: "#ffcc00", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)" }}
     >
-      <Toolbar sx={{ padding: "0 20px" }}>
+      <Toolbar sx={{ padding: "0 0px" }}>
         {/* Brand Name */}
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: "bold", color: "#333" }}>
           Golden Hour Cafe
@@ -22,6 +22,7 @@ function Navbar() {
             component={Link}
             to="/login"
             sx={{
+              color:"black",
               fontWeight: "bold",
               textTransform: "none",
               "&:hover": {
@@ -36,6 +37,7 @@ function Navbar() {
             component={Link}
             to="/menu"
             sx={{
+              color:"black",
               fontWeight: "bold",
               textTransform: "none",
               "&:hover": {
